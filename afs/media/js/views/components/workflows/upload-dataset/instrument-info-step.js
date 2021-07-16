@@ -116,6 +116,11 @@ define([
         };
 
         params.form.save = function() {
+            if(!self.instrumentValue()){
+                params.form.alert(new params.form.AlertViewModel('ep-alert-red', "Instrument Required", "Selecting an instrument is required."));
+                return;
+            }
+
             let observedThingData = {};
             observedThingData[observedThingNodeId] = self.createRelatedInstance(observedThingInstanceId);
             return self.saveTile(observedThingData, observedThingNodeId, self.observationInstanceId(), observedThingTileid)
@@ -152,10 +157,10 @@ define([
                 .then(function(data) {
                     parameterTileId = data.tileid;
                     self.observationInstanceId(data.resourceinstance_id); // mutates updateValue to refresh value before saving.
-                    params.form.complete(true);
                     params.form.savedData(params.form.addedData());
+                    params.form.complete(true);
+                    params.form.alert("");
                 });
-    
         };
     }
 
